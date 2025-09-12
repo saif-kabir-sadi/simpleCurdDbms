@@ -1,0 +1,139 @@
+@media only screen and (max-width :1268px) {
+    .tagSec {
+        overflow: hidden;
+    }
+
+    .ins_curosel {
+        display: none;
+    }
+}
+
+@media only screen and (max-width :800px) {
+    .herodiv h2 {
+        font-size: 1.2rem;
+    }
+
+    .herodiv {
+        width: 40vw;
+        margin-right: 15vw !important;
+        margin-left: 50vw;
+    }
+
+    .herosec {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .productsec_item {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .products img {
+        height: 150px;
+    }
+
+    .inspiration {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ins_headersec {
+        max-width: 100%;
+    }
+
+    .ins_curosel_img {
+        flex-wrap: wrap;
+    }
+    .up_footer_element_img img {
+        width: 2rem;
+    }
+    .up_footer_element_text h3 {
+        font-size: 1rem;
+    }
+    .cartelement {
+        flex-direction: column;
+    }
+    
+}
+
+@media only screen and (max-width :500px) {
+    .responsive_menu{
+        display: block;
+    }
+    .headsec {
+        padding: 10px 25px;
+        align-items: center;        font-size: 1.2rem;
+    }
+    .herodiv {
+        width: 100%;
+        margin: 0;
+    }
+
+    .inspiration {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .productsec_item {
+        grid-template-columns: auto auto;
+    }
+
+    .ins_midsec img {
+        width: 85%
+    }
+
+    .footer p,
+    .footer a {
+        font-size: 10px;
+    }
+
+    .footer {
+        padding: 20px 15px;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .footer-newsletter input,
+    .footer-newsletter button {
+        padding: 10px;
+        width: 100%;
+        font-size: 7px;
+        margin: 0;
+    }
+
+    .h-shortsec {
+        display: none;
+    }
+    .h-righticonsec {
+        display: none;
+    }
+    .h-iconsec {
+        justify-content: flex-start;
+    }
+    .contactways.dflex {
+        flex-direction: column;
+    }
+    .contactform_btn {
+        margin: 0px auto;
+
+    }
+    .filtersection p {
+        font-size: 10px;
+    }
+    .filtersection img {
+        width: 20px;
+    }
+    .filterways span {
+        font-size: 12px;
+    }
+    .filtericons {
+        margin-right: 3vw;
+        padding: 2vw;
+    }
+    .up_footer_element_text p {
+        font-size: 0.7rem;
+    }
+    .up_footer_element_text h3 {
+        font-size: 0.8rem;
+    }
+
+}
