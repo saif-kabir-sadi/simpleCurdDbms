@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/Meubel House_Logos-05.png" type="image/x-icon">
+    <!-- Font Awesome  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/responsive.css">
+    <title>NewsBD</title>
+</head>
+
+<body>
+    <header>
+        <div class="headsec dflex">
+            <div class="h-iconsec dflex">
+                <p>NewsBD</p>
+            </div>
+            <div class="h-shortsec  ">
+                <div class="search-box">
+                    <input type="search" placeholder="&#128269;Search">
+                </div>
+            </div>
+            <div class="h-righticonsec">
+                <ul>
+                    <li><a href="#" id="profileIcon"><i class="fa-solid fa-user"></i></a></li>
+                </ul>
+            </div>
+            <!-- <div class="responsive_menu"><i class="fa-solid fa-bars"></i></div> -->
+        </div>
+    </header>
+    <script>
+        // Profile icon click: redirect admin to dashboard
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileIcon = document.getElementById('profileIcon');
+            profileIcon.addEventListener('click', function (e) {
+                e.preventDefault();
+                const role = localStorage.getItem('role');
+                if (role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    alert('You are not an admin.');
+                }
+            });
+        });
+    </script>
+    <!-- Blog Section -->
+    <div class="Blog_container">
+        <div class="Blog_container">
+            <div class="blogpost" id="blogGrid">
+                <!-- Blog cards will be rendered here dynamically -->
+            </div>
+        </div>
+    </div>
+        <div class="blog_next dflex">
+            <button type="button">1</button>
+            <button type="button">2</button>
+            <button type="button">3</button>
+            <button type="button">Next</button>
+        </div>
+
+        <script>
+            // Fetch and render news cards dynamically
+            async function renderBlogCards() {
+                const grid = document.getElementById('blogGrid');
+                grid.innerHTML = '';
+                try {
+                    const res = await fetch('/api/news');
+                    const newsList = await res.json();
+                    newsList.forEach(news => {
+                        const card = document.createElement('div');
+                        card.className = 'blogcontent';
+                        card.innerHTML = `
+                    <div class="blogimg">
+                        <img src="img/images.jpeg" alt="">
+                    </div>
+                    <div class="blogTnDsection dflex">
+                        <div class="blog_author">
+                            <img src="img/dashicons_admin-users.png" alt="">
+                            <span>Admin</span>
+                        </div>
+                        <div class="blog_author">
+                            <img src="img/uis_calender.png" alt="">
+                            <span>${news.date}</span>
+                        </div>
+                        <div class="blog_author">
+                            <img src="img/ci_tag.png" alt="">
+                            <span class="news-category">${news.category || 'General'}</span>
+                        </div>
+                    </div>
+                    <h2>${news.title}</h2>
+                    <p>${news.content}</p>
+                    <button type="submit">Read more</button>
+                `;
+                        grid.appendChild(card);
+                    });
+                } catch (err) {
+                    grid.innerHTML = '<p style="color:red">Failed to load news.</p>';
+                }
+            }
+            document.addEventListener('DOMContentLoaded', renderBlogCards);
+        </script>
+        <!-- Footer section -->
+        <footer>
+            <div class="footer-bottom">
+                <p> 2025 NewsBD. All rights reserved |&copy sksadi</p>
+            </div>
+        </footer>
+</body>
+
+</html>

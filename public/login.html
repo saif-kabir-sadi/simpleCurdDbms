@@ -92,7 +92,14 @@
             });
             const data = await res.json();
             if (data.message === 'Login successful') {
-                window.location.href = 'index.html';
+                // Store role and name in localStorage
+                localStorage.setItem('role', data.role);
+                localStorage.setItem('name', data.name);
+                if (data.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = '/static/index.html';
+                }
             } else {
                 alert(data.message);
             }

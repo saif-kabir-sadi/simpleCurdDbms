@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/Meubel House_Logos-05.png" type="image/x-icon">
+    <!-- Font Awesome  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive.css">
+    <title>NewsBD</title>
+</head>
+
+<body>
+       <header>
+        <div class="headsec dflex">
+            <div class="h-iconsec dflex">
+                <p>NewsBD</p>
+            </div>
+            <div class="h-shortsec  ">
+                <div class="search-box">
+                    <input type="search" placeholder="&#128269;Search">
+                </div>
+            </div>
+            <div class="h-righticonsec">
+                <ul>
+                    <li><a href="#" id="profileIcon"><i class="fa-solid fa-user"></i></a></li>
+                </ul>
+            </div>
+            <!-- <div class="responsive_menu"><i class="fa-solid fa-bars"></i></div> -->
+        </div>
+    </header>
+    <section>
+        <div class="admin-hero dflex">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome, <span id="adminName"></span></p>
+        </div>
+        <script>
+            // Display admin name from localStorage
+            document.addEventListener('DOMContentLoaded', function () {
+                const adminName = localStorage.getItem('name') || 'Admin';
+                document.getElementById('adminName').textContent = adminName;
+            });
+        </script>
+    </section>
+    <main>
+        <section class="admin-crud">
+            <hr>
+            <h2>Make User Admin</h2>
+            <form id="makeAdminForm" class="admin-form">
+                <div>
+                    <label for="adminEmail">User Email:</label>
+                    <input type="email" id="adminEmail" name="adminEmail" required>
+                </div>
+                <button type="submit">Make Admin</button>
+            </form>
+
+            <h2>Create User</h2>
+            <form id="signupForm" class="admin-form">
+                <div>
+                    <label for="signupName">Name:</label>
+                    <input type="text" id="signupName" name="signupName" required>
+                </div>
+                <div>
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="signupEmail" required>
+                </div>
+                <div>
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required>
+                </div>
+                <div>
+                    <label for="signupRole">Role:</label>
+                    <select id="signupRole" name="signupRole">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit">Create User</button>
+            </form>
+
+            <h2>Manage News</h2>
+            <div class="admin_search">
+                <label for="searchId"><strong>Search by Post ID:</strong></label>
+                <input type="number" id="searchId" placeholder="Enter Post ID">
+                <button type="button" id="searchBtn">Search</button>
+            </div>
+            <form id="newsForm" class="admin-form">
+                <div id="newsIdContainer" style="display:none;">
+                    <label for="newsId">Post ID:</label>
+                    <input type="number" id="newsId" name="newsId" placeholder="Enter Post ID" min="1">
+                </div>
+                <div>
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div>
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                </div>
+                <div>
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div>
+                    <label for="content">News Content:</label>
+                    <textarea id="content" name="content" rows="3" required></textarea>
+                </div>
+                <div>
+                    <label for="image">Post Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+                <button type="submit">Add/Update News</button>
+                <button type="button" id="resetBtn">Reset</button>
+            </form>
+            <hr>
+            <div id="newsList">
+                <div style="margin-top:32px;color:black">
+                    <h3>All Posts</h3>
+                    <table id="postsTable" style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr style="background:#f5f5f5;">
+                                <th style="border:1px solid #ccc;padding:8px;">ID</th>
+                                <th style="border:1px solid #ccc;padding:8px;">Title</th>
+                                <th style="border:1px solid #ccc;padding:8px;">Location</th>
+                                <th style="border:1px solid #ccc;padding:8px;">Date</th>
+                                <th style="border:1px solid #ccc;padding:8px;">Category</th>
+                                <th style="border:1px solid #ccc;padding:8px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="admin.js"></script>
+    <footer>
+        <div class="footer-bottom">
+            <p> 2025 NewsBD. All rights reserved |&copy sksadi</p>
+        </div>
+    </footer>
+</body>
