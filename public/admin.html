@@ -30,7 +30,6 @@
                     <li><a href="#" id="profileIcon"><i class="fa-solid fa-user"></i></a></li>
                 </ul>
             </div>
-            <!-- <div class="responsive_menu"><i class="fa-solid fa-bars"></i></div> -->
         </div>
     </header>
     <section>
@@ -56,6 +55,15 @@
                     <input type="email" id="adminEmail" name="adminEmail" required>
                 </div>
                 <button type="submit">Make Admin</button>
+            </form>
+
+            <h2>Remove User</h2>
+            <form id="removeUserForm" class="admin-form">
+                <div>
+                    <label for="removeEmail">User Email:</label>
+                    <input type="email" id="removeEmail" name="removeEmail" required>
+                </div>
+                <button type="submit">Remove User</button>
             </form>
 
             <h2>Create User</h2>
@@ -110,8 +118,8 @@
                     <textarea id="content" name="content" rows="3" required></textarea>
                 </div>
                 <div>
-                    <label for="image">Post Image:</label>
-                    <input type="file" id="image" name="image" accept="image/*">
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" name="category" placeholder="e.g. Sports, Politics, Tech" required>
                 </div>
                 <button type="submit">Add/Update News</button>
                 <button type="button" id="resetBtn">Reset</button>

@@ -18,6 +18,28 @@
             }
         };
     }
+
+    // Remove user by email
+    const removeUserForm = document.getElementById('removeUserForm');
+    if (removeUserForm) {
+        removeUserForm.onsubmit = async function (e) {
+            e.preventDefault();
+            const email = removeUserForm.removeEmail.value;
+            if (!confirm(`Are you sure you want to remove user: ${email}?`)) return;
+            try {
+                const res = await fetch('/api/remove-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                alert(data.message);
+                removeUserForm.reset();
+            } catch (err) {
+                alert('Failed to remove user.');
+            }
+        };
+    }
     // Admin user creation form
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
@@ -108,28 +130,30 @@ document.addEventListener('DOMContentLoaded', function () {
     newsForm.onsubmit = async function (e) {
         e.preventDefault();
         const id = newsIdInput.value;
-        const formData = new FormData(newsForm);
         const isEditMode = document.getElementById('newsIdContainer').style.display === 'block';
-        console.log('Submitting news form:', {
-            id,
+        const newsPayload = {
             title: newsForm.title.value,
             location: newsForm.location.value,
             date: newsForm.date.value,
-            content: newsForm.content.value
-        });
+            content: newsForm.content.value,
+            category: newsForm.category.value
+        };
+        console.log('Submitting news form:', { id, ...newsPayload });
         try {
             let response;
             if (id && isEditMode) {
                 // Update
                 response = await fetch(`/api/news/${id}`, {
                     method: 'PUT',
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newsPayload)
                 });
             } else {
                 // Add
                 response = await fetch('/api/news', {
                     method: 'POST',
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newsPayload)
                 });
             }
             console.log('Response from server:', response);
@@ -151,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
     newsForm.location.value = news.location;
     newsForm.date.value = news.date;
     newsForm.content.value = news.content;
+    newsForm.category.value = news.category || '';
     newsIdInput.value = news.id;
     document.getElementById('newsIdContainer').style.display = 'block';
     };
@@ -196,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 newsForm.location.value = news.location;
                 newsForm.date.value = news.date;
                 newsForm.content.value = news.content;
+                newsForm.category.value = news.category || '';
                 newsIdInput.value = news.id;
                 document.getElementById('newsIdContainer').style.display = 'block';
             } catch (err) {

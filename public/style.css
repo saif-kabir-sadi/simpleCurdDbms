@@ -13,13 +13,15 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.dflex{
+.dflex {
     display: flex;
 }
-body{
-    background-color:var(--secolor);
+
+body {
+    background-color: var(--secolor);
     color: white;
 }
+
 /*Login page*/
 .loginpagedesign {
     display: grid;
@@ -27,9 +29,11 @@ body{
     place-items: center;
     background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
 }
-.loginpagedesign label{
+
+.loginpagedesign label {
     margin: 0;
 }
+
 ::selection {
     background: #1a75ff;
     color: #fff;
@@ -238,6 +242,7 @@ ul {
 ul li a {
     text-decoration: none;
 }
+
 .headsec {
     padding: 10px 0px;
     align-items: center;
@@ -282,7 +287,40 @@ ul li a {
 
 .h-shortsec {
     flex: 4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box input {
+    width: 220px;
+    padding: 10px 35px 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button#searchBtn {
+    background: white;
+    color: rgb(113, 105, 121);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+button#searchBtn {
+    background: white;
+    color: rgb(113, 105, 121);
 }
 
 .h-righticonsec {
@@ -294,6 +332,7 @@ ul li a {
     justify-content: center;
     gap: 2vw;
 }
+
 .search-box input {
     width: 100%;
     padding: 10px 35px 10px 10px;
@@ -310,6 +349,7 @@ ul li a {
     border-radius: 16px;
     padding: 32px 24px;
 }
+
 .admin-crud h2 {
     text-align: center;
     color: var(--primary-color);
@@ -317,21 +357,26 @@ ul li a {
     font-size: 2rem;
     font-weight: 600;
 }
+
 #newsForm {
     display: grid;
     gap: 18px;
     margin-bottom: 24px;
 }
+
 #newsForm div {
     display: flex;
     flex-direction: column;
 }
+
 #newsForm label {
     font-weight: 500;
     margin-bottom: 6px;
     color: #333;
 }
-#newsForm input, #newsForm textarea {
+
+#newsForm input,
+#newsForm textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -339,10 +384,13 @@ ul li a {
     background: #fff;
     transition: border-color 0.2s;
 }
-#newsForm input:focus, #newsForm textarea:focus {
+
+#newsForm input:focus,
+#newsForm textarea:focus {
     border-color: var(--primary-color);
     outline: none;
 }
+
 button {
     padding: 10px 18px;
     border: none;
@@ -354,27 +402,32 @@ button {
     margin-right: 8px;
     transition: background 0.2s;
 }
+
 #newsList {
     display: grid;
     gap: 24px;
 }
+
 .news-card {
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     padding: 20px 18px;
     position: relative;
     transition: box-shadow 0.2s;
 }
+
 .news-card:hover {
-    box-shadow: 0 6px 24px rgba(184,142,47,0.18);
+    box-shadow: 0 6px 24px rgba(184, 142, 47, 0.18);
 }
+
 .news-card h3 {
     color: var(--primary-color);
     margin-bottom: 8px;
     font-size: 1.3rem;
     font-weight: 600;
 }
+
 .news-card p {
     margin: 6px 0;
     color: #444;
@@ -386,38 +439,40 @@ button {
 }
 
 /*Blog*/
-.blogcontent{
+.blogcontent {
     max-width: 31%;
     background: var(--thcolor);
     border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
     padding: 32px 24px;
     color: black;
 }
-    .Blog_container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        width: 100%;
-        padding: 3vw 2vh;
-    }
 
-    .blogpost {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 32px;
-        width: 100%;
-    }
+.Blog_container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 3vw 2vh;
+}
 
-    .blogcontent {
-        max-width: 100%;
-        background: var(--thcolor);
-        border-radius: 16px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-        padding: 32px 24px;
-        color: black;
-        margin-bottom: 32px;
-    }
+.blogpost {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    width: 100%;
+}
+
+.blogcontent {
+    max-width: 100%;
+    background: var(--thcolor);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    padding: 32px 24px;
+    color: black;
+    margin-bottom: 32px;
+}
+
 .btn {
     padding: 10px 30px;
     font-size: 16px;
@@ -428,27 +483,33 @@ button {
     background: transparent;
     margin: 20px 0px;
 }
+
 .blogimg {
     width: 100%;
     height: auto;
     border-radius: 12px;
     text-align: center;
 }
-.blog_author{
+
+.blog_author {
     display: flex;
     align-items: center;
     gap: 2px;
 }
-.blogcontent button{
+
+.blogcontent button {
     margin-top: 20px;
 }
+
 .blogTnDsection {
     margin: 20px 0px;
     gap: 10px;
 }
+
 .blog_next.dflex {
     justify-content: center;
 }
+
 footer {
     padding: 2vh 3vw;
     text-align: center;
@@ -456,27 +517,32 @@ footer {
     color: black;
     margin-top: 40px;
 }
-#profileIcon{
+
+#profileIcon {
     font-size: 40px;
     color: white;
 }
-.admin-hero{
+
+.admin-hero {
     align-items: center;
     justify-content: center;
     font-size: 40px;
     color: black;
 }
-.admin_search{
+
+.admin_search {
     margin-bottom: 20px;
     color: black;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 input#searchId {
     padding: 10px 3px;
     border-radius: 10px;
 }
+
 form#makeAdminForm {
     color: black;
     display: flex;
@@ -484,10 +550,12 @@ form#makeAdminForm {
     align-items: center;
     justify-content: center;
 }
+
 input#adminEmail {
     padding: 10px 0px;
     border-radius: 10px;
 }
+
 form#signupForm {
     color: black;
     display: flex;
@@ -498,18 +566,22 @@ form#signupForm {
     max-width: 400px;
     margin: 0 auto;
 }
-form#signupForm > div {
+
+form#signupForm>div {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
-form#signupForm input, form#signupForm select {
+
+form#signupForm input,
+form#signupForm select {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
     width: 100%;
     box-sizing: border-box;
 }
+
 form#signupForm button {
     padding: 10px 18px;
     border-radius: 8px;
@@ -519,4 +591,22 @@ form#signupForm button {
     border: none;
     cursor: pointer;
     width: 100%;
+}
+
+button#searchBtn {
+    background: white;
+    color: rgb(113, 105, 121);
+}
+
+form#removeUserForm {
+    color: black;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+input#removeEmail {
+    padding: 10px 0px;
+    border-radius: 10px;
 }

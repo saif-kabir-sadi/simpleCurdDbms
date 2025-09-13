@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/responsive.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../responsive.css">
     <title>NewsBD</title>
 </head>
 
@@ -22,7 +22,8 @@
             </div>
             <div class="h-shortsec  ">
                 <div class="search-box">
-                    <input type="search" placeholder="&#128269;Search">
+                    <input type="search" id="searchInput" placeholder="&#128269;Search">
+                    <button id="searchBtn" type="button">Search</button>
                 </div>
             </div>
             <div class="h-righticonsec">
@@ -65,44 +66,74 @@
 
         <script>
             // Fetch and render news cards dynamically
-            async function renderBlogCards() {
+            async function renderBlogCards(filter = '') {
                 const grid = document.getElementById('blogGrid');
                 grid.innerHTML = '';
+                let newsList = [];
                 try {
-                    const res = await fetch('/api/news');
-                    const newsList = await res.json();
+                    let res, isSearch = false;
+                    if (filter) {
+                        res = await fetch(`/api/news/search?q=${encodeURIComponent(filter)}`);
+                        isSearch = true;
+                    } else {
+                        res = await fetch('/api/news');
+                    }
+                    if (!res.ok) {
+                        if (isSearch && res.status === 404) {
+                            grid.innerHTML = `<p style="color:orange">No news found for "${filter}".</p>`;
+                        } else {
+                            grid.innerHTML = `<p style="color:red">Failed to load news. (${res.status})</p>`;
+                        }
+                        return;
+                    }
+                    newsList = await res.json();
+                    if (!Array.isArray(newsList) || newsList.length === 0) {
+                        grid.innerHTML = `<p style="color:orange">No news found${filter ? ` for "${filter}"` : ''}.</p>`;
+                        return;
+                    }
                     newsList.forEach(news => {
                         const card = document.createElement('div');
                         card.className = 'blogcontent';
                         card.innerHTML = `
-                    <div class="blogimg">
-                        <img src="img/images.jpeg" alt="">
-                    </div>
-                    <div class="blogTnDsection dflex">
-                        <div class="blog_author">
-                            <img src="img/dashicons_admin-users.png" alt="">
-                            <span>Admin</span>
-                        </div>
-                        <div class="blog_author">
-                            <img src="img/uis_calender.png" alt="">
-                            <span>${news.date}</span>
-                        </div>
-                        <div class="blog_author">
-                            <img src="img/ci_tag.png" alt="">
-                            <span class="news-category">${news.category || 'General'}</span>
-                        </div>
-                    </div>
-                    <h2>${news.title}</h2>
-                    <p>${news.content}</p>
-                    <button type="submit">Read more</button>
-                `;
+                            <div class="blogimg">
+                                <img src="img/images.jpeg" alt="">
+                            </div>
+                            <div class="blogTnDsection dflex">
+                                <div class="blog_author">
+                                    <img src="img/dashicons_admin-users.png" alt="">
+                                    <span>Admin</span>
+                                </div>
+                                <div class="blog_author">
+                                    <img src="img/uis_calender.png" alt="">
+                                    <span>${news.date}</span>
+                                </div>
+                                <div class="blog_author">
+                                    <img src="img/ci_tag.png" alt="">
+                                    <span class="news-category">${news.category || 'General'}</span>
+                                </div>
+                            </div>
+                            <h2>${news.title}</h2>
+                            <p>${news.content}</p>
+                            <button type="submit">Read more</button>
+                        `;
                         grid.appendChild(card);
                     });
                 } catch (err) {
-                    grid.innerHTML = '<p style="color:red">Failed to load news.</p>';
+                    grid.innerHTML = '<p style="color:red">Failed to load news (network error).</p>';
                 }
             }
-            document.addEventListener('DOMContentLoaded', renderBlogCards);
+            document.addEventListener('DOMContentLoaded', () => {
+                renderBlogCards();
+                document.getElementById('searchBtn').addEventListener('click', () => {
+                    const filter = document.getElementById('searchInput').value;
+                    renderBlogCards(filter);
+                });
+                document.getElementById('searchInput').addEventListener('keyup', (e) => {
+                    if (e.key === 'Enter') {
+                        renderBlogCards(e.target.value);
+                    }
+                });
+            });
         </script>
         <!-- Footer section -->
         <footer>

@@ -1,10 +1,11 @@
+// ...existing code...
+
 
 const express = require('express');
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const path = require('path');
-const upload = require('./upload');
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -33,6 +34,23 @@ app.post('/api/make-admin', (req, res) => {
     });
 });
 
+// Remove user by email
+app.post('/api/remove-user', (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email required' });
+    db.query('DELETE FROM users WHERE email=?', [email], (err, result) => {
+        if (err) {
+            console.error('DB error on remove-user:', err);
+            return res.status(500).json({ message: 'Database error', error: err });
+        }
+        if (result.affectedRows === 0) {
+            console.warn('No user found for email:', email);
+            return res.status(404).json({ message: 'User not found', email });
+        }
+        res.json({ message: 'User removed successfully', email });
+    });
+});
+
 
 
 // Serve login.html for root path ONLY
@@ -48,13 +66,16 @@ app.get('/', (req, res) => {
 
 
 
-// Serve static files only from /static subfolder
-const staticDir = path.resolve(__dirname, '..', 'public', 'static');
-console.log('Serving static files from:', staticDir);
-app.use('/static', express.static(staticDir));
 
-// Catch-all route: serve login.html for unknown non-API, non-static routes
-app.get(/^\/(?!api|static).*/, (req, res) => {
+
+// Serve static files from the entire public directory FIRST
+const publicDir = path.resolve(__dirname, '..', 'public');
+console.log('Serving static files from:', publicDir);
+app.use(express.static(publicDir));
+
+
+// Catch-all route: serve login.html for unknown non-API, non-static, non-file routes
+app.get(/^\/(?!api|static|.*\..*$).*/, (req, res) => {
     const loginPath = path.join(__dirname, '..', 'public', 'login.html');
     res.sendFile(loginPath);
 });
@@ -109,67 +130,79 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Get all news
 app.get('/api/news', (req, res) => {
-    console.log('GET /api/news called');
     db.query('SELECT * FROM news ORDER BY date DESC', (err, results) => {
         if (err) {
             console.error('Database error on GET /api/news:', err);
             return res.status(500).json({ message: 'Database error' });
         }
-        console.log('GET /api/news results:', results);
         res.json(results);
     });
 });
 
-// Add news with image upload
-app.post('/api/news', upload.single('image'), (req, res) => {
-    console.log('POST /api/news called');
-    const { title, location, date, content } = req.body;
-    let imagePath = '';
-    console.log('Received news post:', { title, location, date, content, file: req.file });
-    if (req.file) {
-        imagePath = '/uploads/' + req.file.filename;
+// Search news by category, title, or content
+app.get('/api/news/search', (req, res) => {
+    let { q } = req.query;
+    if (!q || typeof q !== 'string' || !q.trim()) {
+        console.warn('Search endpoint called with empty query');
+        return res.status(400).json({ message: 'Search query required' });
     }
-    if (!title || !location || !date || !content) {
-        console.warn('Missing field:', { title, location, date, content });
+    q = q.trim();
+    const searchTerm = `%${q.toLowerCase()}%`;
+    const sql = 'SELECT * FROM news WHERE LOWER(title) LIKE ? OR LOWER(content) LIKE ? OR LOWER(category) LIKE ? ORDER BY date DESC';
+    console.log(`[SEARCH] Query: "${q}", SQL: ${sql}, Params:`, [searchTerm, searchTerm, searchTerm]);
+    db.query(sql, [searchTerm, searchTerm, searchTerm], (err, results) => {
+        if (err) {
+            console.error('Database error on /api/news/search:', err);
+            return res.status(500).json({ message: 'Database error', error: err });
+        }
+        if (!Array.isArray(results)) {
+            console.error('Unexpected results type from DB:', results);
+            return res.status(500).json({ message: 'Unexpected DB response', results });
+        }
+        if (results.length === 0) {
+            console.info('No news found for search:', q);
+            return res.status(404).json({ message: 'No news found for search', query: q });
+        }
+        res.json(results);
+    });
+});
+
+// Add news (no image)
+app.post('/api/news', (req, res) => {
+    console.log('POST /api/news called');
+    const { title, location, date, content, category } = req.body;
+    console.log('Received news post:', { title, location, date, content, category });
+    if (!title || !location || !date || !content || !category) {
+        console.warn('Missing field:', { title, location, date, content, category });
         return res.status(400).json({ message: 'All fields required' });
     }
-    db.query('INSERT INTO news (title, location, date, content, image) VALUES (?, ?, ?, ?, ?)', [title, location, date, content, imagePath], (err, result) => {
+    db.query('INSERT INTO news (title, location, date, content, category) VALUES (?, ?, ?, ?, ?)', [title, location, date, content, category], (err, result) => {
         if (err) {
             console.error('SQL error on INSERT:', err);
             return res.status(500).json({ message: 'Database error', error: err });
         }
-        console.log('News inserted successfully:', { id: result.insertId, title, location, date, content, image: imagePath });
-        res.status(201).json({ id: result.insertId, title, location, date, content, image: imagePath });
+        console.log('News inserted successfully:', { id: result.insertId, title, location, date, content, category });
+        res.status(201).json({ id: result.insertId, title, location, date, content, category });
     });
 });
 
 // Update news with optional image upload
-app.put('/api/news/:id', upload.single('image'), (req, res) => {
+app.put('/api/news/:id', (req, res) => {
     const { id } = req.params;
-    const { title, location, date, content } = req.body;
-    let imagePath = '';
-    if (req.file) {
-        imagePath = '/uploads/' + req.file.filename;
-    }
-    if (!title || !location || !date || !content) {
-        console.warn('Missing field for update:', { title, location, date, content });
+    const { title, location, date, content, category } = req.body;
+    if (!title || !location || !date || !content || !category) {
+        console.warn('Missing field for update:', { title, location, date, content, category });
         return res.status(400).json({ message: 'All fields required' });
     }
-    let query = 'UPDATE news SET title=?, location=?, date=?, content=?';
-    let params = [title, location, date, content];
-    if (imagePath) {
-        query += ', image=?';
-        params.push(imagePath);
-    }
-    query += ' WHERE id=?';
-    params.push(id);
+    let query = 'UPDATE news SET title=?, location=?, date=?, content=?, category=? WHERE id=?';
+    let params = [title, location, date, content, category, id];
     db.query(query, params, (err, result) => {
         if (err) {
             console.error('SQL error on UPDATE:', err);
             return res.status(500).json({ message: 'Database error', error: err });
         }
-        console.log('News updated successfully:', { id, title, location, date, content, image: imagePath });
-        res.json({ id, title, location, date, content, image: imagePath });
+        console.log('News updated successfully:', { id, title, location, date, content, category });
+        res.json({ id, title, location, date, content, category });
     });
 });
 
