@@ -610,3 +610,13 @@ input#removeEmail {
     padding: 10px 0px;
     border-radius: 10px;
 }
+#updateRoleForm{
+    margin: auto;
+    text-align: center;
+}
+#updateRoleForm label {
+    color: black;
+}
+table#usersTable {
+    color: black;
+}

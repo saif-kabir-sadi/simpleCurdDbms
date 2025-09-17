@@ -37,25 +37,46 @@
             <h1>Admin Dashboard</h1>
             <p>Welcome, <span id="adminName"></span></p>
         </div>
-        <script>
-            // Display admin name from localStorage
-            document.addEventListener('DOMContentLoaded', function () {
-                const adminName = localStorage.getItem('name') || 'Admin';
-                document.getElementById('adminName').textContent = adminName;
-            });
-        </script>
     </section>
     <main>
         <section class="admin-crud">
             <hr>
-            <h2>Make User Admin</h2>
-            <form id="makeAdminForm" class="admin-form">
-                <div>
-                    <label for="adminEmail">User Email:</label>
-                    <input type="email" id="adminEmail" name="adminEmail" required>
+            <h2>Update User Role</h2>
+            <form id="updateRoleForm" class="admin-form" style="margin-bottom: 24px; max-width: 400px;">
+                <div style="margin-bottom: 12px;">
+                    <label for="roleEmail" style="display:block;margin-bottom:4px;">User Email:</label>
+                    <input type="email" id="roleEmail" name="roleEmail" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
                 </div>
-                <button type="submit">Make Admin</button>
+                <div style="margin-bottom: 12px;">
+                    <label for="roleValue" style="display:block;margin-bottom:4px;">Role:</label>
+                    <select id="roleValue" name="roleValue" required style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="remove-btn">Update Role</button>
             </form>
+
+            <div id="roleUpdateMsg" style="text-align: center;margin-bottom:16px;color:#217dbb;"></div>
+
+            <h2>All Users</h2>
+            <div style="margin-bottom:12px;text-align: center;">
+                <button id="refreshUsersBtn" class="remove-btn" style="margin-bottom:10px;">Refresh Users</button>
+            </div>
+            <div id="usersTableContainer" style="overflow-x:auto;">
+                <table id="usersTable" style="width:100%;border-collapse:collapse; margin: 0 auto;">
+                    <thead>
+                        <tr style="background:#f5f5f5;">
+                            <th style="border:1px solid #ccc;padding:8px;text-align:center;">Name</th>
+                            <th style="border:1px solid #ccc;padding:8px;text-align:center;">Email</th>
+                            <th style="border:1px solid #ccc;padding:8px;text-align:center;">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align:center;">
+                        <!-- User rows will be rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
 
             <h2>Remove User</h2>
             <form id="removeUserForm" class="admin-form">
@@ -147,6 +168,9 @@
             </div>
         </section>
     </main>
+    <script>
+    // ...existing code...
+    </script>
     <script src="admin.js"></script>
     <footer>
         <div class="footer-bottom">

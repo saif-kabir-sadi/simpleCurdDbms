@@ -1,72 +1,94 @@
-    // Make user admin by email
-    const makeAdminForm = document.getElementById('makeAdminForm');
-    if (makeAdminForm) {
-        makeAdminForm.onsubmit = async function (e) {
-            e.preventDefault();
-            const email = makeAdminForm.adminEmail.value;
-            try {
-                const res = await fetch('/api/make-admin', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-                const data = await res.json();
-                alert(data.message);
-                makeAdminForm.reset();
-            } catch (err) {
-                alert('Failed to make user admin.');
-            }
-        };
-    }
+// Update User Role
+const updateRoleForm = document.getElementById('updateRoleForm');
+if (updateRoleForm) {
+    updateRoleForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = document.getElementById('roleEmail').value.trim();
+        const role = document.getElementById('roleValue').value;
+        if (!email || !role) return;
+        const res = await fetch('/api/update-role', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, role })
+        });
+        const data = await res.json();
+        document.getElementById('roleUpdateMsg').textContent = data.message || 'Role updated.';
+    });
+}
+// Make user 
+const makeAdminForm = document.getElementById('makeAdminForm');
+if (makeAdminForm) {
+    makeAdminForm.onsubmit = async function (e) {
+        e.preventDefault();
+        const email = makeAdminForm.adminEmail.value;
+        try {
+            const res = await fetch('/api/make-admin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            alert(data.message);
+            makeAdminForm.reset();
+        } catch (err) {
+            alert('Failed to make user admin.');
+        }
+    };
+}
 
-    // Remove user by email
-    const removeUserForm = document.getElementById('removeUserForm');
-    if (removeUserForm) {
-        removeUserForm.onsubmit = async function (e) {
-            e.preventDefault();
-            const email = removeUserForm.removeEmail.value;
-            if (!confirm(`Are you sure you want to remove user: ${email}?`)) return;
-            try {
-                const res = await fetch('/api/remove-user', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-                const data = await res.json();
-                alert(data.message);
-                removeUserForm.reset();
-            } catch (err) {
-                alert('Failed to remove user.');
-            }
-        };
-    }
-    // Admin user creation form
-    const signupForm = document.getElementById('signupForm');
-    if (signupForm) {
-        signupForm.onsubmit = async function (e) {
-            e.preventDefault();
-            const name = signupForm.signupName.value;
-            const email = signupForm.signupEmail.value;
-            const password = signupForm.signupPassword.value;
-            const role = signupForm.signupRole.value;
-            try {
-                const res = await fetch('/api/signup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role })
-                });
-                const data = await res.json();
-                alert(data.message);
-                signupForm.reset();
-            } catch (err) {
-                alert('Failed to create user.');
-            }
-        };
-    }
-// admin.js - Handles dynamic CRUD for news cards
+// Remove user
+const removeUserForm = document.getElementById('removeUserForm');
+if (removeUserForm) {
+    removeUserForm.onsubmit = async function (e) {
+        e.preventDefault();
+        const email = removeUserForm.removeEmail.value;
+        if (!confirm(`Are you sure you want to remove user: ${email}?`)) return;
+        try {
+            const res = await fetch('/api/remove-user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            const data = await res.json();
+            alert(data.message);
+            removeUserForm.reset();
+        } catch (err) {
+            alert('Failed to remove user.');
+        }
+    };
+}
+//user creation 
+const signupForm = document.getElementById('signupForm');
+if (signupForm) {
+    signupForm.onsubmit = async function (e) {
+        e.preventDefault();
+        const name = signupForm.signupName.value;
+        const email = signupForm.signupEmail.value;
+        const password = signupForm.signupPassword.value;
+        const role = signupForm.signupRole.value;
+        try {
+            const res = await fetch('/api/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password, role })
+            });
+            const data = await res.json();
+            alert(data.message);
+            signupForm.reset();
+        } catch (err) {
+            alert('Failed to create user.');
+        }
+    };
+}
+
+// Display admin name from localStorage
+document.addEventListener('DOMContentLoaded', function () {
+    const adminName = localStorage.getItem('name') || 'Admin';
+    document.getElementById('adminName').textContent = adminName;
+});
+
 
 document.addEventListener('DOMContentLoaded', function () {
-    // --- LOGIN/AUTH CHECK ---
     const role = localStorage.getItem('role');
     if (role !== 'admin') {
         alert('You must be logged in as admin to access this page.');
@@ -83,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let newsData = [];
 
-    // Fetch all news from backend
+    // Fetch all news 
     async function fetchNews() {
         try {
             const res = await fetch('/api/news');
@@ -96,9 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Render all news cards and table
+    // Render all news 
     function renderNews() {
-        // Only render table, cards removed for clarity
         const table = document.getElementById('postsTable');
         if (table) {
             const tbody = table.querySelector('tbody');
@@ -169,15 +190,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Edit news
     window.editNews = function (id) {
-    const news = newsData.find(n => n.id === id);
-    if (!news) return;
-    newsForm.title.value = news.title;
-    newsForm.location.value = news.location;
-    newsForm.date.value = news.date;
-    newsForm.content.value = news.content;
-    newsForm.category.value = news.category || '';
-    newsIdInput.value = news.id;
-    document.getElementById('newsIdContainer').style.display = 'block';
+        const news = newsData.find(n => n.id === id);
+        if (!news) return;
+        newsForm.title.value = news.title;
+        newsForm.location.value = news.location;
+        newsForm.date.value = news.date;
+        newsForm.content.value = news.content;
+        newsForm.category.value = news.category || '';
+        newsIdInput.value = news.id;
+        document.getElementById('newsIdContainer').style.display = 'block';
     };
 
     // Delete news
@@ -193,12 +214,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Reset form
     resetBtn.onclick = function () {
-    newsForm.reset();
-    newsIdInput.value = '';
-    document.getElementById('newsIdContainer').style.display = 'none';
+        newsForm.reset();
+        newsIdInput.value = '';
+        document.getElementById('newsIdContainer').style.display = 'none';
     };
 
-    // Search by post ID and populate form
+    // ID search
     if (searchBtn) {
         searchBtn.onclick = async function () {
             const id = searchIdInput.value;
@@ -211,7 +232,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const allNews = await res.json();
                 const news = allNews.find(n => n.id == id);
                 if (!news) {
-                    // No post found, clear form for new post
                     newsForm.reset();
                     newsIdInput.value = '';
                     document.getElementById('newsIdContainer').style.display = 'none';
@@ -231,5 +251,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     fetchNews();
-// ...existing code...
+
 });
+// Fetch and render users in the admin dashboard
+async function fetchAndRenderUsers() {
+    const tableBody = document.querySelector('#usersTable tbody');
+    tableBody.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
+    try {
+        const res = await fetch('/api/users');
+        const users = await res.json();
+        if (!Array.isArray(users) || users.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="3">No users found.</td></tr>';
+            return;
+        }
+        tableBody.innerHTML = '';
+        users.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style='border:1px solid #ccc;padding:8px;'>${user.name || ''}</td>
+                <td style='border:1px solid #ccc;padding:8px;'>${user.email}</td>
+                <td style='border:1px solid #ccc;padding:8px;'>${user.role}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    } catch (err) {
+        tableBody.innerHTML = '<tr><td colspan="3" style="color:red;">Failed to load users.</td></tr>';
+    }
+}
+
+document.getElementById('refreshUsersBtn').onclick = fetchAndRenderUsers;
+// Auto-load users on page load
+fetchAndRenderUsers();

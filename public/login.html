@@ -90,9 +90,9 @@
             });
             const data = await res.json();
             if (data.message === 'Login successful') {
-                // Store role and name in localStorage
                 localStorage.setItem('role', data.role);
                 localStorage.setItem('name', data.name);
+                localStorage.setItem('email', email);
                 if (data.role === 'admin') {
                     window.location.href = 'admin.html';
                 } else {

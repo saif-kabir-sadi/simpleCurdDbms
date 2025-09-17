@@ -2,10 +2,10 @@ const mysql = require('mysql2');
 
 const db = mysql.createConnection({
        host: 'localhost',
-       user: 'root', // change to your MySQL username
-       password: '1234', // change to your MySQL password
-       database: 'simpleCurd', // updated to your new database name
-       port: 3306 // default MySQL port
+       user: 'root', 
+       password: '1234', 
+       database: 'simpleCurd', 
+       port: 3306
 });
 
 db.connect((err) => {
